@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7208A958-1431-4DE0-B0FE-20248C8050DF}"
+ProjectSection(SolutionItems) = preProject
+	src\README.md = src\README.md
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1A0B1EBF-5088-4CAE-AC50-AF4E1CCE71D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEP.P724.MediaService", "src\SEP.P724.MediaService\SEP.P724.MediaService.csproj", "{1C6D1BBA-0E09-434F-8239-5AFDA6D704AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEP.P724.MediaService.Contract", "src\SEP.P724.MediaService.Contract\SEP.P724.MediaService.Contract.csproj", "{392B2651-8FF3-4135-BCB5-37959DAE41F8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1C6D1BBA-0E09-434F-8239-5AFDA6D704AE} = {7208A958-1431-4DE0-B0FE-20248C8050DF}
+		{392B2651-8FF3-4135-BCB5-37959DAE41F8} = {7208A958-1431-4DE0-B0FE-20248C8050DF}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C6D1BBA-0E09-434F-8239-5AFDA6D704AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C6D1BBA-0E09-434F-8239-5AFDA6D704AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C6D1BBA-0E09-434F-8239-5AFDA6D704AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C6D1BBA-0E09-434F-8239-5AFDA6D704AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{392B2651-8FF3-4135-BCB5-37959DAE41F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{392B2651-8FF3-4135-BCB5-37959DAE41F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{392B2651-8FF3-4135-BCB5-37959DAE41F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{392B2651-8FF3-4135-BCB5-37959DAE41F8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

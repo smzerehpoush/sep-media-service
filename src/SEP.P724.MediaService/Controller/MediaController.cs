@@ -1,14 +1,14 @@
 ﻿using System;
-using System.IO;
-using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SEP.P724.MediaService.Contract;
 using SEP.P724.MediaService.Services;
+using ServerSideApp.Filters;
 
 namespace SEP.P724.MediaService.Controller
 {
     [ApiController]
-    [Route("/media")]
+    [Route("/api/v1/media")]
     public class MediaController : ControllerBase
     {
         private readonly IMediaService _mediaService;
@@ -30,13 +30,12 @@ namespace SEP.P724.MediaService.Controller
             return Ok(_mediaService.GetMedia());
         }
 
+        [DisableFormValueModelBinding]
         [HttpPost("/upload")]
-        public string UploadMedia([FromForm] IFormFile file)
+        public async Task<IActionResult> UploadMedia()
         {
-            using (var sr = new StreamReader(file.OpenReadStream()))
-            {
-                return _mediaService.UploadMedia(file);
-            }
+            MediaDto media = await _mediaService.UploadMedia(Request);
+            return Created("api/v1/media/upload", media);
         }
     }
 }
