@@ -12,10 +12,22 @@ namespace SEP.P724.MediaService.Utilities
 {
     public static class FileHelpers
     {
-        // For more file signatures, see the File Signatures Database (https://www.filesignatures.net/)
-        // and the official specifications for the file types you wish to add.
         private static readonly Dictionary<string, List<byte[]>> FileSignature = new Dictionary<string, List<byte[]>>
         {
+            // case ".txt": return "text/plain";
+            // case ".csv": return "text/csv";
+            // case ".pdf": return "application/pdf";
+            // case ".doc": return "application/vnd.ms-word";
+            // case ".xls": return "application/vnd.ms-excel";
+            // case ".ppt": return "application/vnd.ms-powerpoint";
+            // case ".docx": return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            // case ".xlsx": return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            // case ".pptx": return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+            // case ".png": return "image/png";
+            // case ".jpg": return "image/jpeg";
+            // case ".jpeg": return "image/jpeg";
+            // case ".gif": return "image/gif";
+
             {".gif", new List<byte[]> {new byte[] {0x47, 0x49, 0x46, 0x38}}},
             {".png", new List<byte[]> {new byte[] {0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A}}},
             {
@@ -98,14 +110,15 @@ namespace SEP.P724.MediaService.Utilities
 
             data.Position = 0;
 
-            using (var reader = new BinaryReader(data))
-            {
-                var signatures = FileSignature[ext];
-                var headerBytes = reader.ReadBytes(signatures.Max(m => m.Length));
-
-                return signatures.Any(signature =>
-                    headerBytes.Take(signature.Length).SequenceEqual(signature));
-            }
+            // using (var reader = new BinaryReader(data))
+            // {
+            //     var signatures = FileSignature[ext];
+            //     var headerBytes = reader.ReadBytes(signatures.Max(m => m.Length));
+            //
+            //     return signatures.Any(signature =>
+            //         headerBytes.Take(signature.Length).SequenceEqual(signature));
+            // }
+            return true;
         }
     }
 }

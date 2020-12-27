@@ -18,16 +18,11 @@ namespace SEP.P724.MediaService.Controller
             _mediaService = mediaService;
         }
 
-        [HttpGet("/get/{mediaId}")]
+        [HttpGet("{mediaId}")]
         public ActionResult<MediaDto> GetMedia(Guid mediaId)
         {
-            return Ok(_mediaService.GetMedia(mediaId));
-        }
-
-        [HttpGet("/file")]
-        public ActionResult GetMedia()
-        {
-            return Ok(_mediaService.GetMedia());
+            var result = _mediaService.GetMedia(mediaId).Result;
+            return File(result.Item2, result.Item1.MimeType, result.Item1.FileName);
         }
 
         [DisableFormValueModelBinding]

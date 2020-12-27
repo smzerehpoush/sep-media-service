@@ -7,7 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using SEP.P724.MediaService.Contract;
 using SEP.P724.MediaService.Exceptions;
@@ -21,44 +21,47 @@ namespace SEP.P724.MediaService.Services
         private static readonly IEnumerable<string> PermittedExtension = new[] {"*"};
         private static readonly long FileSizeLimit = long.MaxValue;
         private readonly IMapper _mapper;
+        private readonly MediaServiceContext _mediaServiceContext;
 
-        public MediaServiceImpl(IMapper mapper)
+        public MediaServiceImpl(IMapper mapper, MediaServiceContext mediaServiceContext)
         {
             _mapper = mapper;
+            _mediaServiceContext = mediaServiceContext;
         }
 
-        public MediaDto GetMedia(Guid mediaId)
+        public async Task<Tuple<MediaModel, byte[]>> GetMedia(Guid mediaId)
         {
-            var media = new MediaDto() {Id = Guid.NewGuid()};
-            return media;
-        }
-
-        public object GetMedia()
-        {
-            var path =
-                @"C:\Users\m.zerehpoush\w\SEP.P724.MediaServiceSolution\src\SEP.P724.MediaService\Resources\Files\f424c6d8-145e-41cd-932d-e07c0f6f411f";
-            return File.Open(path, FileMode.Open);
-        }
-
-        public string UploadMedia(IFormFile file)
-        {
-            if (file == null)
+            var mediaModel = await _mediaServiceContext.Medias.FirstOrDefaultAsync(media => media.Id == mediaId);
+            if (mediaModel == null)
             {
-                return null;
+                throw new MediaNotFoundException(mediaId);
             }
 
-            Guid fileId = Guid.NewGuid();
-            var folderName = Path.Combine("Resources", "Files" /*, new Random().Next(MaxDirectoryCuont).ToString()*/);
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            Directory.CreateDirectory(pathToSave);
-            var fileName = file.FileName;
-            var fullPath = Path.Combine(pathToSave, fileId.ToString());
-            using (var stream = new FileStream(fullPath, FileMode.Create))
-            {
-                file.CopyTo(stream);
-            }
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "Files",
+                mediaModel.Id.ToString());
+            var bytes = await File.ReadAllBytesAsync(path);
+            return new Tuple<MediaModel, byte[]>(mediaModel, bytes);
+        }
 
-            return fullPath + "\n" + fileId;
+        private static string GetMimeTypes(string ext)
+        {
+            switch (ext)
+            {
+                case ".txt": return "text/plain";
+                case ".csv": return "text/csv";
+                case ".pdf": return "application/pdf";
+                case ".doc": return "application/vnd.ms-word";
+                case ".xls": return "application/vnd.ms-excel";
+                case ".ppt": return "application/vnd.ms-powerpoint";
+                case ".docx": return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                case ".xlsx": return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                case ".pptx": return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                case ".png": return "image/png";
+                case ".jpg": return "image/jpeg";
+                case ".jpeg": return "image/jpeg";
+                case ".gif": return "image/gif";
+                default: return "application/octet-stream";
+            }
         }
 
         public async Task<MediaDto> UploadMedia(HttpRequest request)
@@ -82,13 +85,18 @@ namespace SEP.P724.MediaService.Services
                     {
                         var trustedFileName = WebUtility.HtmlEncode(contentDisposition.FileName.Value);
                         mediaModel.FileName = trustedFileName;
+                        mediaModel.MimeType = GetMimeTypes(Path.GetExtension(trustedFileName));
                         var streamedFileContent = await FileHelpers.ProcessStreamedFile(section, contentDisposition,
                             PermittedExtension, FileSizeLimit);
 
 
-                        var trustedFilePath = Path.Combine("Resources", "Files",
-                            mediaModel.Id + (Path.GetExtension(trustedFileName) ?? string.Empty));
-                        await using var targetStream = File.Create(trustedFilePath);
+                        var folderName = Path.Combine("Resources", "Files");
+                        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                        Directory.CreateDirectory(pathToSave);
+                        var fullPath = Path.Combine(pathToSave,
+                            mediaModel.Id.ToString());
+
+                        await using var targetStream = File.Create(fullPath);
                         await targetStream.WriteAsync(streamedFileContent);
                     }
                 }
@@ -97,9 +105,11 @@ namespace SEP.P724.MediaService.Services
                 section = await reader.ReadNextSectionAsync();
             }
 
-            // todo: validate and persist formModel
-            // _logger.LogInformation(mediaModel.Id.ToString());
-            return _mapper.Map<MediaDto>(mediaModel);
+            await _mediaServiceContext.Medias.AddAsync(mediaModel);
+            await _mediaServiceContext.SaveChangesAsync();
+            MediaDto mediaDto = _mapper.Map<MediaDto>(mediaModel);
+            mediaDto.DownloadUrl = $"{request.Scheme}://{request.Host}{request.PathBase}/api/v1/media/{mediaModel.Id}";
+            return mediaDto;
         }
 
         private static void CheckContentType(HttpRequest request)

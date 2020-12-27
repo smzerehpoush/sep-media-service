@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SEP.P724.MediaService.Contract;
+using SEP.P724.MediaService.Model;
 
 namespace SEP.P724.MediaService.Services
 {
     public interface IMediaService
     {
-        MediaDto GetMedia(Guid mediaId);
-        object GetMedia();
-        string UploadMedia(IFormFile file);
+        Task<Tuple<MediaModel, byte[]>> GetMedia(Guid mediaId);
         Task<MediaDto> UploadMedia(HttpRequest request);
     }
 }

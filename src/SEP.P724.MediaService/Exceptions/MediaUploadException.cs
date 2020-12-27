@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace SEP.P724.MediaService.Exceptions
+﻿namespace SEP.P724.MediaService.Exceptions
 {
-    public class MediaUploadException : Exception
+    public class MediaUploadException : ServiceException
     {
         public MediaUploadException(string errorMessage)
         {
