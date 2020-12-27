@@ -15,10 +15,7 @@ namespace SEP.P724.MediaService.Migrations
                     FileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MimeType = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Medias", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Medias", x => x.Id); });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

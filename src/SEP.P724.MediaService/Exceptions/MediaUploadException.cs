@@ -2,11 +2,8 @@
 {
     public class MediaUploadException : ServiceException
     {
-        public MediaUploadException(string errorMessage)
+        public MediaUploadException(string? message) : base(message)
         {
-            this.ErrorMessage = errorMessage;
         }
-
-        public string ErrorMessage { get; set; }
     }
 }

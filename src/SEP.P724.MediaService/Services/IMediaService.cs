@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using SEP.P724.MediaService.Contract;
 using SEP.P724.MediaService.Model;
 

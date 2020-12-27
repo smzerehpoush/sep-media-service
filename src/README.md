@@ -4,13 +4,13 @@ this is a media service for SEP ecosystem.
 ## Goal
 
 - [ ] uploading content
-    - [ ] store file metadata in Database
+    - [x] store file metadata in Database
     - [x] store file content in physical storage
     
-- [ ] downloading content
-    - [ ] retrieve file metadata based on fileId
-    - [ ] retrieve file from physical storage
-    - [ ] stream file to download
+- [x] downloading content
+    - [x] retrieve file metadata based on fileId
+    - [x] retrieve file from physical storage
+    - [x] stream file to download
     
 ## Challenges
 - Security considerations

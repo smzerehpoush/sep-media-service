@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SEP.P724.MediaService;
+using SEP.P724.MediaService.Context;
 
 namespace SEP.P724.MediaService.Migrations
 {
-    [DbContext(typeof(MediaServiceContext))]
+    [DbContext(typeof(MediaContext))]
     [Migration("20201227073255_InitialCreate")]
     partial class InitialCreate
     {

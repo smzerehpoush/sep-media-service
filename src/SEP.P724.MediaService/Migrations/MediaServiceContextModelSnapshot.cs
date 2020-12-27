@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SEP.P724.MediaService;
+using SEP.P724.MediaService.Context;
 
 namespace SEP.P724.MediaService.Migrations
 {
-    [DbContext(typeof(MediaServiceContext))]
+    [DbContext(typeof(MediaContext))]
     partial class MediaServiceContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -26,9 +26,11 @@ namespace SEP.P724.MediaService.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FileName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MimeType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

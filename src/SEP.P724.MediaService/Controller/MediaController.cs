@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SEP.P724.MediaService.Contract;
+using SEP.P724.MediaService.Filters;
 using SEP.P724.MediaService.Services;
-using ServerSideApp.Filters;
 
 namespace SEP.P724.MediaService.Controller
 {
@@ -19,10 +19,10 @@ namespace SEP.P724.MediaService.Controller
         }
 
         [HttpGet("{mediaId}")]
-        public ActionResult<MediaDto> GetMedia(Guid mediaId)
+        public ActionResult<MediaDto> DownloadMedia(Guid mediaId)
         {
-            var result = _mediaService.GetMedia(mediaId).Result;
-            return File(result.Item2, result.Item1.MimeType, result.Item1.FileName);
+            var (mediaModel, mediaBytes) = _mediaService.GetMedia(mediaId).Result;
+            return File(mediaBytes, mediaModel.MimeType, mediaModel.FileName);
         }
 
         [DisableFormValueModelBinding]

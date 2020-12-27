@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using SEP.P724.MediaService.Context;
 using SEP.P724.MediaService.Services;
 
 namespace SEP.P724.MediaService
@@ -22,7 +23,7 @@ namespace SEP.P724.MediaService
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("MediaServiceDatabase");
-            services.AddDbContextPool<MediaServiceContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContextPool<MediaContext>(options => options.UseSqlServer(connectionString));
             services.AddControllers();
             services.AddRazorPages();
             services.AddSwaggerGen(c =>

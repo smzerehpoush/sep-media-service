@@ -4,11 +4,8 @@ namespace SEP.P724.MediaService.Exceptions
 {
     public class MediaNotFoundException : ServiceException
     {
-        public string Message { get; }
-
-        public MediaNotFoundException(Guid id)
+        public MediaNotFoundException(Guid mediaId) : base($"Media By Id [{mediaId.ToString()} Not Found.]")
         {
-            this.Message = $"Media By Id [{id} Not Found.]";
         }
     }
 }
