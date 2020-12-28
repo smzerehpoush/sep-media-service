@@ -6,7 +6,9 @@ namespace SEP.P724.MediaService.Configs
     public class Configuration
     {
         private static readonly IEnumerable<string> PermittedExtensions = new string[] {"*"};
-        private static readonly long FileSizeLimit = long.MaxValue;
+        private const long FileSizeLimit = long.MaxValue;
+        private const long MinStreamFileSizeLimitInByte = 2048000L;
+
 
         public string GetPhysicalStorageLocation()
         {
@@ -21,6 +23,11 @@ namespace SEP.P724.MediaService.Configs
         public long GetFileSizeLimit()
         {
             return FileSizeLimit;
+        }
+
+        public bool NeedStream(int mediaBytesLength)
+        {
+            return mediaBytesLength > MinStreamFileSizeLimitInByte;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SEP.P724.MediaService.Configs;
 using SEP.P724.MediaService.Contract;
 using SEP.P724.MediaService.Filters;
 using SEP.P724.MediaService.Services;
@@ -12,17 +13,20 @@ namespace SEP.P724.MediaService.Controller
     public class MediaController : ControllerBase
     {
         private readonly IMediaService _mediaService;
+        private readonly Configuration _configuration;
 
         public MediaController(IMediaService mediaService)
         {
             _mediaService = mediaService;
+            _configuration = new Configuration();
         }
 
         [HttpGet("{mediaId}")]
         public ActionResult<MediaDto> DownloadMedia(Guid mediaId)
         {
             var (mediaModel, mediaBytes) = _mediaService.GetMedia(mediaId).Result;
-            return File(mediaBytes, mediaModel.MimeType, true);
+            
+            return File(mediaBytes, mediaModel.MimeType, _configuration.NeedStream(mediaBytes.Length));
         }
 
         [DisableFormValueModelBinding]
