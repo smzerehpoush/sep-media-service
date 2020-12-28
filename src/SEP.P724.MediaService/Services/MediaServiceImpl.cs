@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using SEP.P724.MediaService.Configs;
 using SEP.P724.MediaService.Context;
@@ -22,16 +23,19 @@ namespace SEP.P724.MediaService.Services
         private readonly IMapper _mapper;
         private readonly MediaContext _mediaContext;
         private readonly Configuration _configuration;
+        private readonly ILogger _logger;
 
-        public MediaServiceImpl(IMapper mapper, MediaContext mediaContext)
+        public MediaServiceImpl(IMapper mapper, MediaContext mediaContext, ILogger<MediaServiceImpl> logger)
         {
             _mapper = mapper;
             _mediaContext = mediaContext;
+            _logger = logger;
             _configuration = new Configuration();
         }
 
         public async Task<Tuple<MediaModel, byte[]>> GetMedia(Guid mediaId)
         {
+            _logger.LogInformation($"trying to get media by id [{mediaId}]");
             var mediaModel = await GetMediaById(mediaId);
             var path = Path.Combine(_configuration.GetPhysicalStorageLocation(), mediaModel.Id.ToString());
             var bytes = await File.ReadAllBytesAsync(path);
