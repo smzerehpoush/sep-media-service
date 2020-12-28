@@ -37,9 +37,25 @@ namespace SEP.P724.MediaService.Services
         {
             _logger.LogInformation($"trying to get media by id [{mediaId}]");
             var mediaModel = await GetMediaById(mediaId);
+            IncrementDownloadCount(mediaModel);
             var path = Path.Combine(_configuration.GetPhysicalStorageLocation(), mediaModel.Id.ToString());
+            CheckFileExistence(path, mediaModel);
             var bytes = await File.ReadAllBytesAsync(path);
             return new Tuple<MediaModel, byte[]>(mediaModel, bytes);
+        }
+
+        private void CheckFileExistence(string path, MediaModel mediaModel)
+        {
+            if (!File.Exists(path))
+            {
+                throw new MediaNotFoundException(mediaModel.Id);
+            }
+        }
+
+        private void IncrementDownloadCount(MediaModel mediaModel)
+        {
+            mediaModel.DownloadCount = mediaModel.DownloadCount + 1;
+            _mediaContext.SaveChangesAsync();
         }
 
         public async Task<MediaDto> UploadMedia(HttpRequest request)
@@ -119,9 +135,11 @@ namespace SEP.P724.MediaService.Services
                 case ".xlsx": return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 case ".pptx": return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
                 case ".png": return "image/png";
-                case ".jpg": return "image/jpeg";
+                case ".jpg": return "image/jpg";
                 case ".jpeg": return "image/jpeg";
                 case ".gif": return "image/gif";
+                case ".svg": return "image/svg+xml";
+                case ".mp4": return "video/mp4";
                 default: return "application/octet-stream";
             }
         }

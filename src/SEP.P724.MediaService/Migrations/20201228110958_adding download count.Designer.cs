@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SEP.P724.MediaService.Context;
 
 namespace SEP.P724.MediaService.Migrations
 {
     [DbContext(typeof(MediaContext))]
-    partial class MediaServiceContextModelSnapshot : ModelSnapshot
+    [Migration("20201228110958_adding download count")]
+    partial class addingdownloadcount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

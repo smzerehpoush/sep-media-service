@@ -48,7 +48,7 @@ namespace SEP.P724.MediaService
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 

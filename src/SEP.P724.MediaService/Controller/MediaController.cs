@@ -22,7 +22,7 @@ namespace SEP.P724.MediaService.Controller
         public ActionResult<MediaDto> DownloadMedia(Guid mediaId)
         {
             var (mediaModel, mediaBytes) = _mediaService.GetMedia(mediaId).Result;
-            return File(mediaBytes, mediaModel.MimeType, mediaModel.FileName);
+            return File(mediaBytes, mediaModel.MimeType, true);
         }
 
         [DisableFormValueModelBinding]

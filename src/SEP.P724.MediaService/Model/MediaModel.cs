@@ -10,6 +10,8 @@ namespace SEP.P724.MediaService.Model
         public DateTime CreationDate { get; } = DateTime.Now;
         public string MimeType { get; set; }
 
+        public long DownloadCount { get; set; }
+
         public MediaModel(string fileName, string mimeType)
         {
             FileName = fileName;
