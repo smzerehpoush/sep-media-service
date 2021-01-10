@@ -9,11 +9,12 @@ namespace SEP.P724.MediaService.Model
         [Key] public Guid Id { get; }
         public string FileName { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public DateTime CreationDate { get; set; }
+        [Column(TypeName = "datetime")] public DateTime CreationDate { get; set; }
         public string MimeType { get; set; }
 
         public long DownloadCount { get; set; }
+
+        public string? Description { get; set; }
 
         public MediaModel(string fileName, string mimeType)
         {
@@ -21,7 +22,6 @@ namespace SEP.P724.MediaService.Model
             MimeType = mimeType;
             Id = Guid.NewGuid();
             CreationDate = DateTime.Now;
-            ;
         }
     }
 }
