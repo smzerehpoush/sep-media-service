@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using EFCoreExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.WebUtilities;
@@ -12,6 +15,7 @@ using Microsoft.Net.Http.Headers;
 using SEP.P724.MediaService.Configs;
 using SEP.P724.MediaService.Context;
 using SEP.P724.MediaService.Contract;
+using SEP.P724.MediaService.Contract.DTO;
 using SEP.P724.MediaService.Exceptions;
 using SEP.P724.MediaService.Model;
 using SEP.P724.MediaService.Utilities;
@@ -95,6 +99,22 @@ namespace SEP.P724.MediaService.Services
             MediaDto mediaDto = _mapper.Map<MediaDto>(mediaModel);
             mediaDto.DownloadUrl = $"{request.Scheme}://{request.Host}{request.PathBase}/api/v1/media/{mediaModel?.Id}";
             return mediaDto;
+        }
+
+        public PagedResponse<MediaModel> GetMedias(int page, int size)
+        {
+            if (page < 1 || (size < 1 && size != -1))
+            {
+                throw new ValidationException("page is not valid");
+            }
+
+            var pagedResult = _mediaContext.Medias.OrderByDescending(model => model.CreationDate)
+                .Skip((page - 1) * size).Take(size);
+            return new PagedResponse<MediaModel>()
+            {
+                Results = pagedResult.ToList(),
+                TotalCount = _mediaContext.Medias.Count()
+            };
         }
 
         private async Task SaveMediaToDb(MediaModel? mediaModel)

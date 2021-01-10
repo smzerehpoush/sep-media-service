@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SEP.P724.MediaService.Contract;
+using SEP.P724.MediaService.Contract.DTO;
 using SEP.P724.MediaService.Model;
 
 namespace SEP.P724.MediaService.Profiles
@@ -10,6 +11,7 @@ namespace SEP.P724.MediaService.Profiles
         {
             CreateMap<MediaModel, MediaDto>();
             CreateMap<MediaDto, MediaModel>();
+            CreateMap<PagedResponse<MediaModel>, PagedResponse<MediaDto>>();
         }
     }
 }

@@ -24,6 +24,8 @@
 
     <div style="margin-top:15px">
         <output form="uploadForm" name="result"></output>
+        <br/>
+        <div class="downloadLink"></div>
     </div>
 </form>
 
@@ -42,9 +44,13 @@
           },
           body: formData
         });
-
+           
         oFormElement.elements.namedItem("result").value = 
-          'Result: ' + response.status + ' ' + response.statusText;
+          'Result: ' + (response.status === 201 ? "Success" : "Fail")+ ' ' + response.statusText;
+        response.text().then(function (text) {
+            let body = JSON.parse(text);
+            $(".downloadLink").html(`<div> download link : <a href="` + body["downloadUrl"] + `">`+ body["downloadUrl"]+`</a></div>`);
+        });
       } catch (error) {
         console.error('Error:', error);
       }

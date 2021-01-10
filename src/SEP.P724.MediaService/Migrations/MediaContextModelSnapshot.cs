@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SEP.P724.MediaService.Context;
 
 namespace SEP.P724.MediaService.Migrations
 {
     [DbContext(typeof(MediaContext))]
-    [Migration("20201227134728_init")]
-    partial class init
+    partial class MediaContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,6 +24,12 @@ namespace SEP.P724.MediaService.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<long>("DownloadCount")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("FileName")
                         .IsRequired()

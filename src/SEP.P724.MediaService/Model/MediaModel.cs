@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SEP.P724.MediaService.Model
 {
@@ -7,7 +8,9 @@ namespace SEP.P724.MediaService.Model
     {
         [Key] public Guid Id { get; }
         public string FileName { get; set; }
-        public DateTime CreationDate { get; } = DateTime.Now;
+
+        [Column(TypeName = "datetime")]
+        public DateTime CreationDate { get; set; }
         public string MimeType { get; set; }
 
         public long DownloadCount { get; set; }
@@ -17,6 +20,8 @@ namespace SEP.P724.MediaService.Model
             FileName = fileName;
             MimeType = mimeType;
             Id = Guid.NewGuid();
+            CreationDate = DateTime.Now;
+            ;
         }
     }
 }

@@ -10,8 +10,8 @@ using SEP.P724.MediaService.Context;
 namespace SEP.P724.MediaService.Migrations
 {
     [DbContext(typeof(MediaContext))]
-    [Migration("20201228110958_adding download count")]
-    partial class addingdownloadcount
+    [Migration("20210110121035_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,6 +26,9 @@ namespace SEP.P724.MediaService.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime");
 
                     b.Property<long>("DownloadCount")
                         .HasColumnType("bigint");
