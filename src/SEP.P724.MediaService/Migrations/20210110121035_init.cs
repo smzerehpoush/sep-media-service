@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SEP.P724.MediaService.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,10 +12,15 @@ namespace SEP.P724.MediaService.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MimeType = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    MimeType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DownloadCount = table.Column<long>(type: "bigint", nullable: false)
                 },
-                constraints: table => { table.PrimaryKey("PK_Medias", x => x.Id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Medias", x => x.Id);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
