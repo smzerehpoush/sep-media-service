@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
-using EFCoreExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.WebUtilities;
@@ -97,24 +97,37 @@ namespace SEP.P724.MediaService.Services
 
             await SaveMediaToDb(mediaModel);
             MediaDto mediaDto = _mapper.Map<MediaDto>(mediaModel);
-            mediaDto.DownloadUrl = $"{request.Scheme}://{request.Host}{request.PathBase}/api/v1/media/{mediaModel?.Id}";
+            mediaDto.DownloadUrl = GetMediaDownloadUrl(request, mediaModel);
             return mediaDto;
         }
 
-        public PagedResponse<MediaModel> GetMedias(int page, int size)
+        private static string GetMediaDownloadUrl(HttpRequest request, MediaModel mediaModel)
+        {
+            return $"{request.Scheme}://{request.Host}{request.PathBase}/api/v1/media/{mediaModel?.Id}";
+        }
+
+        public PagedResponse<MediaDto> GetMedias(HttpRequest request, int page, int size)
         {
             if (page < 1 || (size < 1 && size != -1))
             {
                 throw new ValidationException("page is not valid");
             }
 
-            var pagedResult = _mediaContext.Medias.OrderByDescending(model => model.CreationDate)
-                .Skip((page - 1) * size).Take(size);
-            return new PagedResponse<MediaModel>()
+            var pagedResult =
+                size == -1
+                    ? _mediaContext.Medias.OrderByDescending(model => model.CreationDate)
+                    : _mediaContext.Medias.OrderByDescending(model => model.CreationDate)
+                        .Skip((page - 1) * size).Take(size);
+            var medias = pagedResult.ToList();
+            var mediaDtoList = new List<MediaDto>();
+            foreach (var mediaModel in medias)
             {
-                Results = pagedResult.ToList(),
-                TotalCount = _mediaContext.Medias.Count()
-            };
+                var mediaDto = _mapper.Map<MediaDto>(mediaModel);
+                mediaDto.DownloadUrl = GetMediaDownloadUrl(request, mediaModel);
+                mediaDtoList.Add(mediaDto);
+            }
+
+            return new PagedResponse<MediaDto>() {Results = mediaDtoList, TotalCount = _mediaContext.Medias.Count()};
         }
 
         private async Task SaveMediaToDb(MediaModel? mediaModel)

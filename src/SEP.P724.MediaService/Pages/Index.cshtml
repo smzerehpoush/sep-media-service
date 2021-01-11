@@ -7,7 +7,10 @@
 <div class="text-center">
     <h1 class="display-4">SEP Media Service</h1>
 </div>
-
+<div class="text-left">
+    <button id="admin-button">Admin Page</button>
+</div>
+<br/>
 @* <form id="uploadForm" action="api/v1/media/upload" method="post"  *@
 <form id="uploadForm" action="upload" method="post"
       enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;">
@@ -27,9 +30,13 @@
 </form>
 
 @section Scripts {
-    <script>
+<script>
     "use strict";
-
+    
+    document.getElementById("admin-button").onclick = function () {
+        location.href = "/Admin";
+    };
+    
     async function AJAXSubmit (oFormElement) {
       const formData = new FormData(oFormElement);
 

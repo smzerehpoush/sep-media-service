@@ -2,13 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using SEP.P724.MediaService.Contract;
 using SEP.P724.MediaService.Contract.DTO;
-using SEP.P724.MediaService.Model;
 using SEP.P724.MediaService.Services;
 
 namespace SEP.P724.MediaService.Controller
 {
     [ApiController]
-    [Route("/api/v1/media")]
+    [Route("/api/v1/admin/media")]
     public class MediaAdminController : ControllerBase
     {
         private readonly IMediaService _mediaService;
@@ -23,8 +22,7 @@ namespace SEP.P724.MediaService.Controller
         [HttpGet]
         public PagedResponse<MediaDto> GetMedias(int page = 1, int size = 20)
         {
-            return _mapper.Map<PagedResponse<MediaModel>, PagedResponse<MediaDto>>(
-                _mediaService.GetMedias(page, size));
+            return _mediaService.GetMedias(Request, page, size);
         }
     }
 }

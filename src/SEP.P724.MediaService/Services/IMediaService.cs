@@ -12,6 +12,6 @@ namespace SEP.P724.MediaService.Services
     {
         Task<Tuple<MediaModel, byte[]>> GetMedia(Guid mediaId);
         Task<MediaDto> UploadMedia(HttpRequest request);
-        PagedResponse<MediaModel> GetMedias(int page, int size);
+        PagedResponse<MediaDto> GetMedias(HttpRequest request, int page, int size);
     }
 }
